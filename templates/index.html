@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clinical Transcript Analyzer</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+
+    <div class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
+        <h2 class="text-center mb-4">Clinical Transcript Analyzer</h2>
+        <p class="text-center text-muted">Upload an MP3 file and get a structured medical summary.</p>
+
+        <form action="/analyze" method="POST" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Upload Audio File (MP3)</label>
+                <input type="file" class="form-control" name="audio" accept=".mp3" required>
+            </div>
+
+            <button class="btn btn-primary w-100 mt-3" type="submit">
+                Analyze Audio
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Clinical Summary</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#f6f7fb; }
+    .card { border: none; border-radius: 12px; }
+    .summary-box { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 6px 18px rgba(13,38,76,0.06); }
+    pre { white-space: pre-wrap; word-wrap: break-word; }
+    .small-muted { font-size: 0.92rem; color: #6b7280; }
+    .pill { display:inline-block; padding:3px 8px; border-radius:999px; background:#eef2ff; color:#3730a3; font-size:0.85rem; margin-right:6px; }
+  </style>
+</head>
+<body>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Clinical Summary</h3>
+    <a href="/" class="btn btn-outline-secondary btn-sm">New upload</a>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-lg-8">
+      <div class="summary-box mb-3">
+        <h5 class="mb-2">Concise summary</h5>
+        <p class="mb-1">{{ summary }}</p>
+        <p class="small-muted mb-0"><strong>Audio:</strong> {{ audio_name }}</p>
+      </div>
+
+      <div class="card p-3 mb-3">
+        <h6 class="mb-2">Chief complaint</h6>
+        <p class="mb-2">{{ out.chief_complaint or "—" }}</p>
+
+        <h6 class="mb-2">History of present illness (HPI)</h6>
+        <p class="mb-2 small-muted">{{ out.medical_history or "No medical history extracted." }}</p>
+      </div>
+
+      <div class="card p-3 mb-3">
+        <h6 class="mb-2">Possible diagnoses</h6>
+        {% if top_dxs and top_dxs|length > 0 %}
+          <ol>
+            {% for d in top_dxs %}
+              <li><strong>{{ d.dx }}</strong> — score: {{ "%.2f"|format(d.score) }}</li>
+            {% endfor %}
+          </ol>
+        {% else %}
+          <p class="small-muted">No suggested diagnoses.</p>
+        {% endif %}
+
+        <h6 class="mb-2">Recommended scans / tests</h6>
+        {% if suggested_scans and suggested_scans|length > 0 %}
+          <ul>
+            {% for s in suggested_scans %}
+              <li>{{ s }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="small-muted">None suggested.</p>
+        {% endif %}
+
+        <h6 class="mb-2">Follow-ups / Plan</h6>
+        <p>{{ plan or "—" }}</p>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card p-3">
+        <h6 class="mb-2">Symptoms (extracted)</h6>
+        {% if out.symptoms and out.symptoms|length > 0 %}
+          <ul class="mb-0">
+            {% for s in out.symptoms %}
+              <li>
+                <strong>{{ s.term }}</strong>
+                {% if s.confidence %} — conf: {{ "%.2f"|format(s.confidence|float) }}{% endif %}
+                {% if s.icd10 %} — ICD10: {{ s.icd10 }}{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="small-muted mb-0">No symptoms identified.</p>
+        {% endif %}
+      </div>
+
+      <div class="card p-3 mt-3">
+        <h6 class="mb-2">Medications (suggested)</h6>
+        {% if suggested_meds and suggested_meds|length > 0 %}
+          <ul>
+            {% for m in suggested_meds %}
+              <li>{{ m }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="small-muted">No medications suggested.</p>
+        {% endif %}
+      </div>
+
+      <div class="card p-3 mt-3">
+        <h6 class="mb-2">Transcript (preview)</h6>
+        <details>
+          <summary class="small-muted">Show full transcript</summary>
+          <pre class="mt-2">{{ transcript }}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
