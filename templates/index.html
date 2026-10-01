@@ -1,34 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Clinical Transcript Analyzer</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
+{% extends "layout.html" %}
+{% block title %}New analysis{% endblock %}
+{% block main %}
+<div class="card shadow-sm p-4 mx-auto" style="max-width: 680px;">
+    <h1 class="h3 mb-1">Analyse a consultation</h1>
+    <p class="text-muted">Upload a recording of a doctor–patient conversation, or paste a transcript, and get a structured clinical note.</p>
 
-<body class="bg-light">
+    <form id="analyze-form" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label fw-semibold" for="title">Title</label>
+            <input class="form-control" id="title" name="title" placeholder="e.g. Follow-up, chest pain" autocomplete="off">
+        </div>
 
-<div class="container py-5">
+        <div class="mb-3">
+            <label class="form-label fw-semibold" for="audio">Audio file</label>
+            <input class="form-control" type="file" id="audio" name="audio" accept=".mp3,.wav,.m4a,.ogg,.flac">
+            <div class="form-text">mp3, wav, m4a, ogg or flac, up to 50 MB. Audio is deleted right after transcription.</div>
+        </div>
 
-    <div class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
-        <h2 class="text-center mb-4">Clinical Transcript Analyzer</h2>
-        <p class="text-center text-muted">Upload an MP3 file and get a structured medical summary.</p>
+        <div class="divider my-3"><span>or</span></div>
 
-        <form action="/analyze" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label fw-semibold" for="transcript">Paste a transcript</label>
+            <textarea class="form-control" id="transcript" name="transcript" rows="5"
+                      placeholder="Doctor: What brings you in today?&#10;Patient: I've had chest pain and I'm short of breath..."></textarea>
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Upload Audio File (MP3)</label>
-                <input type="file" class="form-control" name="audio" accept=".mp3" required>
-            </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="ai_summary" name="ai_summary">
+            <label class="form-check-label" for="ai_summary">Also write an AI summary with FLAN-T5 (slower, downloads a model the first time)</label>
+        </div>
 
-            <button class="btn btn-primary w-100 mt-3" type="submit">
-                Analyze Audio
-            </button>
-
-        </form>
-    </div>
-
+        <button class="btn btn-primary w-100" id="submit-btn" type="submit">Analyse</button>
+        <p id="working" class="text-center text-muted mt-3 d-none">
+            <span class="spinner-border spinner-border-sm"></span> Working… transcription can take a minute.
+        </p>
+    </form>
 </div>
-
-</body>
-</html>
+{% endblock %}

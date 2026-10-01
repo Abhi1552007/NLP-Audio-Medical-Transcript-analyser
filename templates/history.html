@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}History{% endblock %}
+{% block main %}
+<div class="row g-3">
+    <div class="col-lg-8">
+        <h1 class="h3">History</h1>
+        <form class="d-flex gap-2 mb-3" action="{{ url_for('history') }}" method="get">
+            <input class="form-control" name="q" value="{{ q }}" placeholder="Search title, transcript or diagnosis" autocomplete="off">
+            <button class="btn btn-outline-primary">Search</button>
+            {% if q %}<a class="btn btn-link" href="{{ url_for('history') }}">Clear</a>{% endif %}
+        </form>
+        {% if rows %}
+        <table class="table table-hover bg-white">
+            <thead><tr><th>Title</th><th>Top suspicion</th><th>Date (UTC)</th></tr></thead>
+            <tbody>
+            {% for r in rows %}
+                <tr>
+                    <td><a href="{{ url_for('show_analysis', analysis_id=r.id) }}">{{ r.title }}</a></td>
+                    <td>{{ top.get(r.id, "—") }}</td>
+                    <td class="text-muted small">{{ r.created_at }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p class="text-muted">{% if q %}No matches.{% else %}No analyses yet. <a href="{{ url_for('index') }}">Run one</a>.{% endif %}</p>
+        {% endif %}
+    </div>
+    <div class="col-lg-4">
+        <div class="card p-3">
+            <h2 class="h6">Most frequent suspicions</h2>
+            {% for c in common %}
+                <div class="d-flex justify-content-between"><span>{{ c.dx }}</span><span class="text-muted">{{ c.n }}</span></div>
+            {% else %}
+                <p class="text-muted mb-0">Nothing yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

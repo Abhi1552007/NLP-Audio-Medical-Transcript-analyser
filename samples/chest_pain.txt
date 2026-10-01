@@ -1,0 +1,9 @@
+Doctor: Good morning, what brings you in today?
+Patient: I've had chest pain since yesterday evening and I feel short of breath when I climb stairs.
+Doctor: Any history of heart problems?
+Patient: I had a heart attack three years ago and they put in a stent. I also have high blood pressure.
+Doctor: What medicines are you taking?
+Patient: Aspirin, atorvastatin and amlodipine every day.
+Doctor: Any dizziness or palpitations?
+Patient: A bit dizzy this morning.
+Doctor: I'd like an ECG and a troponin blood test right now. Please follow up in two days with the results.
